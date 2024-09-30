@@ -24,10 +24,15 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      let counter = 0;
+
       const socket = io({
         auth: {
           serverOffset: 0
-        }
+        },
+        // enable retries
+        ackTimeout: 10000,
+        retries: 3,
       });
     
       const form = document.getElementById('form');
@@ -35,9 +40,6 @@
       const messages = document.getElementById('messages');
       const toggleButton = document.getElementById('toggle-btn');
 
-      // -- TO DO -- Add a message in the messages list
-      // for the connected/recovered state 
-      // for the "Connection state recovery" feature
       toggleButton.addEventListener('click', (e) => {
         e.preventDefault();
         if (socket.connected) {
@@ -52,7 +54,9 @@
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (input.value) {
-          socket.emit('chat message', input.value);
+          // compute a unique offset
+          const clientOffset = `${socket.id}-${counter++}`;
+          socket.emit('chat message', input.value, clientOffset);
           input.value = '';
         }
       });
