@@ -23,6 +23,13 @@ await db.exec(`
 
 const app = express();
 const server = createServer(app);
+// The Connection State Recovery feature is working only
+// by forcefully closing the underlying engine with socket.io.engine.close();
+// as per this example https://socket.io/docs/v4/connection-state-recovery#usage
+// socket.disconnect(); will not work in this case unless after a manual
+// disconnection in network tab of the browser debugger
+// connectionStateRecovery is a feature designed for
+// temporary client disconnections
 const io = new Server(server, {
   connectionStateRecovery: {}
 });
