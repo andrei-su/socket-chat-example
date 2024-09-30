@@ -64,6 +64,22 @@
         window.scrollTo(0, document.body.scrollHeight);
         socket.auth.serverOffset = serverOffset;
       });
+
+      socket.on("connect", () => {
+        console.log(socket.connected); // true
+        const item = document.createElement('li');
+        item.textContent = `*connected (recovered: ${socket.recovered})*`;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      socket.on("disconnect", () => {
+        console.log(socket.connected); // false
+        const item = document.createElement('li');
+        item.textContent = "*disconnected*";
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
     </script>
   </body>
 </html>
