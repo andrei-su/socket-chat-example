@@ -3,21 +3,18 @@ import { socket } from './socket';
 import './App.css';
 
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
   const [value, setValue] = useState('');
   const [toggleButton, setToggleButton] = useState('Disconnect');
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     function onConnect() {
-      setIsConnected(true);
       console.log('Is socket connected? ' + socket.connected);
       setMessages(previous => [...previous, `*connected (recovered: ${socket.recovered})*`]);
       window.scrollTo(0, document.body.scrollHeight);
     }
 
     function onDisconnect() {
-      setIsConnected(false);
       console.log('Is socket connected? ' + socket.connected);
       setMessages(previous => [...previous, "*disconnected*"]);
       window.scrollTo(0, document.body.scrollHeight);
